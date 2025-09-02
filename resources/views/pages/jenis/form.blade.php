@@ -24,7 +24,7 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="/bank/jenis" class="text-decoration-none">
+                                <a href="/admin/bank/jenis" class="text-decoration-none">
                                     <i class="fas fa-recycle"></i> Jenis Sampah
                                 </a>
                             </li>
@@ -92,7 +92,7 @@
                                     </div>
 
                                     <form class="form-horizontal"
-                                        action="{{ request()->is('bank/jenis/create') ? url('bank/jenis/store') : url('bank/jenis/update', $data->id) }}"
+                                        action="{{ request()->is('admin/bank/jenis/create') ? url('admin/bank/jenis/store') : url('admin/bank/jenis/update', $data->id) }}"
                                         method="POST" enctype="multipart/form-data" id="jenisSampahForm">
                                         @csrf
                                         @if ($data)
@@ -233,16 +233,11 @@
                                                                 SIMPAN DATA
                                                             @endif
                                                         </button>
-                                                        <button type="reset" class="btn btn-secondary btn-lg shadow-sm"
-                                                            id="resetBtn">
-                                                            <i class="fas fa-undo mr-2"></i>
-                                                            RESET
-                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="d-flex justify-content-end">
-                                                        <a href="/bank/jenis" class="btn btn-outline-dark btn-lg">
+                                                        <a href="/admin/bank/jenis" class="btn btn-outline-dark btn-lg">
                                                             <i class="fas fa-arrow-left mr-2"></i>
                                                             KEMBALI KE LIST
                                                         </a>

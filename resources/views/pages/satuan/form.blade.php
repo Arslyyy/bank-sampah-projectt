@@ -82,7 +82,7 @@
                             </div>
 
                             <form class="form-horizontal"
-                                action="{{ request()->is('bank/satuan/create') ? url('bank/satuan/store') : url('bank/satuan/update', $data->id) }}"
+                                action="{{ request()->is('admin/bank/satuan/create') ? url('admin/bank/satuan/store') : url('admin/bank/satuan/update', $data->id) }}"
                                 method="POST" enctype="multipart/form-data" id="satuanForm">
                                 @csrf
                                 @if ($data)
@@ -201,16 +201,11 @@
                                                         SIMPAN DATA
                                                     @endif
                                                 </button>
-                                                <button type="reset" class="btn btn-secondary btn-lg shadow-sm"
-                                                    id="resetBtn">
-                                                    <i class="fas fa-undo mr-2"></i>
-                                                    RESET
-                                                </button>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex justify-content-end">
-                                                <a href="/bank/satuan" class="btn btn-outline-dark btn-lg">
+                                                <a href="/admin/bank/satuan" class="btn btn-outline-dark btn-lg">
                                                     <i class="fas fa-arrow-left mr-2"></i>
                                                     KEMBALI KE LIST
                                                 </a>

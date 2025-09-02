@@ -13,13 +13,18 @@ class TransaksiNasabah extends Model
     protected $table = 'transaksi_nasabah';
 
     protected $fillable = [
+        'id_transaksi',
         'tanggal_transaksi',
         'master_nasabah_id',
         'master_jenis_sampah_id',
         'master_satuan_id',
+        'jumlah_berat',
         'jumlah',
-        'uraian',
-        'jenis'
+        'jenis',
+    ];
+
+    protected $casts = [
+    'tanggal_transaksi' => 'date',
     ];
 
     // Relasi ke nasabah
@@ -39,4 +44,6 @@ class TransaksiNasabah extends Model
     {
         return $this->belongsTo(MasterSatuan::class, 'master_satuan_id');
     }
+
+    
 }

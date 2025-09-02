@@ -97,7 +97,7 @@
                                         <h3 class="card-title mb-1"><i class="fas fa-list mr-2"></i>Data Jenis Sampah</h3>
                                     </div>
                                     <div class="card-tools">
-                                        <a href="/bank/jenis/create" class="text-decoration-none">
+                                        <a href="/admin/bank/jenis/create" class="text-decoration-none">
                                             <button class="btn btn-light btn-sm rounded-pill shadow-sm" type="button"><i
                                                     class="fas fa-plus mr-1"></i> Tambah Data</button>
                                         </a>
@@ -209,7 +209,7 @@
                                                     </td>
                                                     <td class="py-4 text-center align-middle">
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ url('bank/jenis/edit/' . $val->id) }}"
+                                                            <a href="{{ url('admin/bank/jenis/edit/' . $val->id) }}"
                                                                 class="btn btn-outline-primary btn-sm rounded-pill px-3"
                                                                 title="Edit Data"><i class="fas fa-edit mr-1"></i>Edit</a>
                                                             <button
@@ -379,7 +379,7 @@
 
         function confirmDelete(id, nama) {
             const form = document.getElementById('deleteForm');
-            form.action = `/bank/jenis/delete/${id}`; // Sesuaikan dengan URL hapus Anda
+            form.action = `admin/bank/jenis/delete/${id}`; // Sesuaikan dengan URL hapus Anda
             $('#deleteText').text(`Jenis sampah "${nama}" akan dihapus dari sistem.`);
             $('#deleteModal').modal('show');
         }

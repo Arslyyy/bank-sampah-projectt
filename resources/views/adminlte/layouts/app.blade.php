@@ -44,25 +44,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/Logo.png') }}">
+    <style>
+        .pagination {
+  justify-content: center; /* Tengahin pagination */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 
-    <script>
-            $(function () {
-        $('#reservationdate').datetimepicker({
-            format: 'DD/MM/YYYY HH:mm A',
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'far fa-calendar-check',
-                clear: 'far fa-trash-alt',
-                close: 'far fa-times-circle'
-            }
-        });
-    });
-    </script>
+.pagination .page-item .page-link {
+  color: #28a745; /* hijau sesuai tema */
+  border-radius: 0.3rem;
+  border: 1px solid #28a745;
+  margin: 0 3px;
+  padding: 6px 12px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-width: 38px;
+  text-align: center;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+  box-shadow: 0 0 8px #28a745aa;
+}
+
+.pagination .page-item:hover:not(.active) .page-link {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #28a74566;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #c8c8c8;
+  border-color: #eee;
+  cursor: default;
+  background-color: #f9f9f9;
+}
+
+.pagination .page-link:focus {
+  box-shadow: 0 0 6px #28a745bb;
+  outline: none;
+}
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -119,7 +147,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="{{ route('home') }}" class="brand-link">
+            <a href="{{ route('admin.dashboard') }}" class="brand-link">
                 <img src="{{ asset('assets/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">{{ $title ?? 'Bank Sampah' }}</span>
@@ -157,15 +185,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item"> <!-- menu-open -->
-                            <a href="{{ url('home') }}"
-                                class="nav-link {{ request()->is('home*') ? 'active' : '' }}"> <!-- active -->
+                            <a href="{{ url('admin/dashboard') }}"
+                                class="nav-link {{ request()->is('admin/dashboard*') ? 'active' : '' }}"> <!-- active -->
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Home</p>
                             </a>
                         </li>
 
-                        <li class="nav-item {{ request()->is('bank*') ? 'menu-open' : '' }}"> <!-- menu-open -->
-                            <a href="#" class="nav-link {{ request()->is('bank*') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('admin/bank*') ? 'menu-open' : '' }}"> <!-- menu-open -->
+                            <a href="#" class="nav-link {{ request()->is('admin/bank*') ? 'active' : '' }}">
                                 <!-- active -->
                                 <i class="nav-icon fas fa-university"></i>
                                 <p>
@@ -175,31 +203,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('bank/harga') }}"
-                                        class="nav-link {{ request()->is('bank/harga*') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Harga Jual Sampah</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('bank/jenis') }}"
-                                        class="nav-link {{ request()->is('bank/jenis*') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Jenis Sampah</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('bank/satuan') }}"
-                                        class="nav-link {{ request()->is('bank/satuan*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/bank/satuan') }}"
+                                        class="nav-link {{ request()->is('admin/bank/satuan*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Satuan</p>
                                     </a>
                                 </li>
-
+                                <li class="nav-item">
+                                    <a href="{{ url('admin/bank/jenis') }}"
+                                        class="nav-link {{ request()->is('admin/bank/jenis*') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Jenis Sampah</p>
+                                    </a>
+                                </li>
+                                 <li class="nav-item">
+                                    <a href="{{ url('admin/bank/harga') }}"
+                                        class="nav-link {{ request()->is('admin/bank/harga*') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Harga Jual Sampah</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
-                        <li class="nav-item {{ request()->is('manajemen*') ? 'menu-open' : '' }}"> <!-- menu-open -->
-                            <a href="#" class="nav-link {{ request()->is('manajemen*') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('admin/manajemen*') ? 'menu-open' : '' }}"> <!-- menu-open -->
+                            <a href="#" class="nav-link {{ request()->is('admin/manajemen*') ? 'active' : '' }}">
                                 <!-- active -->
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
@@ -209,16 +236,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('manajemen/nasabah') }}"
-                                        class="nav-link {{ request()->is('manajemen/nasabah*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/manajemen/nasabah') }}"
+                                        class="nav-link {{ request()->is('admin/manajemen/nasabah*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Data Nasabah</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item {{ request()->is('transaksi*') ? 'menu-open' : '' }}"> <!-- menu-open -->
-                            <a href="#" class="nav-link {{ request()->is('transaksi*') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('admin/transaksi*') ? 'menu-open' : '' }}"> <!-- menu-open -->
+                            <a href="#" class="nav-link {{ request()->is('admin/transaksi*') ? 'active' : '' }}">
                                 <!-- active -->
                                 <i class="nav-icon fas fa-money-bill-wave"></i>
                                 <p>
@@ -229,7 +256,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('transaksi.index') }}"
-                                    class="nav-link {{ request()->is('transaksi/data*') ? 'active' : '' }}">
+                                    class="nav-link {{ request()->is('admin/transaksi/data*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Transaksi</p>
                                     </a>
@@ -237,15 +264,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('transaksi/pemasukkan') }}"
-                                        class="nav-link {{ request()->is('transaksi/pemasukkan*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/transaksi/pemasukkan') }}"
+                                        class="nav-link {{ request()->is('admin/transaksi/pemasukkan*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pemasukkan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('transaksi/pengeluaran') }}"
-                                        class="nav-link {{ request()->is('transaksi/pengeluaran*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/transaksi/pengeluaran') }}"
+                                        class="nav-link {{ request()->is('admin/transaksi/pengeluaran*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pengeluaran</p>
                                     </a>

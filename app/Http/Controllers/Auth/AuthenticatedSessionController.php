@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,11 +24,23 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Proses login
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Cek role user
+        $role = Auth::user()->role;
+
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard'); // arahkan ke dashboard admin
+            case 'nasabah':
+                return redirect()->route('nasabah.dashboard'); // arahkan ke dashboard nasabah
+            default:
+                Auth::logout();
+                return redirect()->route('login')
+                    ->withErrors(['role' => 'Role tidak dikenali.']);
+        }
     }
 
     /**
@@ -40,9 +51,8 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

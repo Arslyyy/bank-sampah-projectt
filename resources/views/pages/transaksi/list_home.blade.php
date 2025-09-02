@@ -173,15 +173,15 @@
                                                         <div class="d-flex align-items-center">
                                                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mr-3"
                                                                 style="width: 40px; height: 40px;">
-                                                                <strong>{{ $val->tanggal_transaksi ? \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y H:i A') : '' }}</strong>
+                                                                <!-- <strong>{{ $val->tanggal_transaksi ? \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y') : '' }}</strong> -->
                                                             </div>
                                                             <div>
                                                                 <div class="font-weight-bold">
-                                                                    {{ $val->tanggal_transaksi ? \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y H:i A') : '' }}
+                                                                    {{ $val->tanggal_transaksi ? \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y') : '' }}
                                                                 </div>
-                                                                <small class="text-muted">
-                                                                    {{ $val->tanggal_transaksi ? \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y H:i A') : '' }}
-                                                                </small>
+                                                                <!-- <small class="text-muted">
+                                                                    {{ $val->tanggal_transaksi ? \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y') : '' }}
+                                                                </small> -->
                                                             </div>
                                                         </div>
                                                     </td>
@@ -213,29 +213,28 @@
                                                             ];
                                                             $colorIndex = $index % count($badgeColors);
                                                         @endphp
-                                                        <span
-                                                            class="badge badge-{{ $badgeColors[$colorIndex] }} badge-pill px-3 py-2 font-weight-normal">
+                                                        <span class="badge badge-{{ $badgeColors[$colorIndex] }} badge-pill px-3 py-2 font-weight-normal">
                                                             <i class="fas fa-recycle mr-1"></i>
-                                                            {{ $val->jenis_sampah->type_sampah ?? 'Tidak Diketahui' }}
+                                                            {{ $val->jenisSampah->type_sampah ?? 'Tidak Diketahui' }}
                                                         </span>
                                                     </td>
-                                                    <td class="py-3">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                                style="width: 35px; height: 35px;">
-                                                                <i class="fas fa-weight-hanging"></i>
-                                                            </div>
-                                                            <div>
-                                                                <div class="font-weight-bold text-lg">
-                                                                    {{ number_format($val->satuans, 1) }}
-                                                                </div>
-                                                                <small class="text-muted text-uppercase">
-                                                                    {{ $val->satuan->satuan ?? 'Unit' }}
-                                                                </small>
+
+                                                <td class="py-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <!-- Ubah ikon/logo di sini -->
+                                                        <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                            style="width: 35px; height: 35px;">
+                                                            <i class="fas fa-money-bill-wave"></i> <!-- contoh ganti ikon -->
+                                                        </div>
+                                                        <div>
+                                                            <div class="font-weight-bold text-lg">
+                                                                <!-- Format menjadi Rp. -->
+                                                                {{ 'Rp ' . number_format($val->jumlah, 0, ',', '.') }}
                                                             </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
+                                                    </div>
+                                                </td>
+
                                             @empty
                                                 <tr>
                                                     <td colspan="4" class="text-center py-5">

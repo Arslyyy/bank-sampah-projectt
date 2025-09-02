@@ -91,7 +91,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="d-flex justify-content-end">
-                                            <a href="/manajemen/nasabah/create" class="btn btn-light btn-sm shadow-sm mr-2">
+                                            <a href="/admin/manajemen/nasabah/create" class="btn btn-light btn-sm shadow-sm mr-2">
                                                 <i class="fas fa-user-plus mr-1"></i>
                                                 Tambah Nasabah Baru
                                             </a>
@@ -259,12 +259,12 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ url('manajemen/nasabah/show/' . $val->id) }}"
+                                                            <a href="{{ url('/admin/manajemen/nasabah/show/' . $val->id) }}"
                                                                 class="btn btn-info btn-sm" data-toggle="tooltip"
                                                                 title="Lihat Detail">
                                                                 <i class="fas fa-eye"></i>
                                                             </a>
-                                                            <a href="{{ url('manajemen/nasabah/edit/' . $val->id) }}"
+                                                            <a href="{{ url('/admin/manajemen/nasabah/edit/' . $val->id) }}"
                                                                 class="btn btn-warning btn-sm" data-toggle="tooltip"
                                                                 title="Edit Data">
                                                                 <i class="fas fa-edit"></i>
@@ -286,7 +286,7 @@
                                                             <h5 class="text-muted mt-3">Belum Ada Data Nasabah</h5>
                                                             <p class="text-muted mb-4">Silakan tambahkan nasabah pertama
                                                                 untuk memulai</p>
-                                                            <a href="/manajemen/nasabah/create" class="btn btn-primary">
+                                                            <a href="/admin/manajemen/nasabah/create" class="btn btn-primary">
                                                                 <i class="fas fa-user-plus mr-1"></i>
                                                                 Tambah Nasabah Pertama
                                                             </a>
@@ -531,7 +531,7 @@
 
         // Delete confirmation function
         function confirmDelete(id, nama) {
-            $('#deleteForm').attr('action', '/manajemen/nasabah/delete/' + id);
+            $('#deleteForm').attr('action', '/admin/manajemen/nasabah/' + id);
             $('#nasabahName').text(nama);
             $('#deleteModal').modal('show');
         }

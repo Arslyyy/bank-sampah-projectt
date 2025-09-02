@@ -67,7 +67,7 @@
 
                             <!-- Form Body -->
                             <form class="form-horizontal"
-                                action="{{ request()->is('manajemen/nasabah/create') ? url('manajemen/nasabah/store') : url('manajemen/nasabah/update', $data->id) }}"
+                                action="{{ request()->is('admin/manajemen/nasabah/create') ? url('admin/manajemen/nasabah/store') : url('admin/manajemen/nasabah/update', $data->id) }}"
                                 method="POST" enctype="multipart/form-data" id="nasabahForm">
                                 @csrf
                                 @if ($data)
@@ -234,6 +234,60 @@
                                         </div>
                                     </div>
 
+                                    <!-- Email Field -->
+                                    <div class="form-group mb-4">
+                                        <label class="font-weight-bold text-dark mb-3">
+                                            <i class="fas fa-envelope text-orange mr-2"></i>
+                                            Email
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text bg-light border-right-0">
+                                                    <i class="fas fa-at text-orange"></i>
+                                                </span>
+                                            </div>
+                                            <input type="email"
+                                            class="form-control border-left-0 @error('email') is-invalid @enderror"
+                                            name="email" id="email"
+                                            value="{{ old('email', $data->user->email ?? '') }}"
+                                            placeholder="Masukkan email nasabah">
+                                        </div>
+                                        @error('email')
+                                            <div class="alert alert-danger mt-2 border-0" style="border-radius: 10px;">
+                                                <i class="fas fa-exclamation-triangle mr-2"></i>{{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Password Field -->
+                                    <div class="form-group mb-4">
+                                        <label class="font-weight-bold text-dark mb-3">
+                                            <i class="fas fa-lock text-orange mr-2"></i>
+                                            Password
+                                            @if(!$data)
+                                                <span class="text-danger">*</span>
+                                            @endif
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text bg-light border-right-0">
+                                                    <i class="fas fa-key text-orange"></i>
+                                                </span>
+                                            </div>
+                                            <input type="password"
+                                                class="form-control border-left-0 @error('password') is-invalid @enderror"
+                                                name="password" id="password"
+                                                placeholder="{{ $data ? 'Kosongkan jika tidak ingin diubah' : 'Masukkan password nasabah' }}">
+                                        </div>
+                                        @error('password')
+                                            <div class="alert alert-danger mt-2 border-0" style="border-radius: 10px;">
+                                                <i class="fas fa-exclamation-triangle mr-2"></i>{{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+
                                     <!-- Additional Info -->
                                     <div class="alert alert-info border-0" style="border-radius: 10px;">
                                         <div class="d-flex align-items-center">
@@ -260,15 +314,10 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex justify-content-end">
-                                                <a href="/manajemen/nasabah"
+                                                <a href="/admin/manajemen/nasabah"
                                                     class="btn btn-outline-secondary rounded-pill mr-2 px-4">
                                                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                                                 </a>
-                                                <button type="reset"
-                                                    class="btn btn-outline-warning rounded-pill mr-2 px-4"
-                                                    onclick="resetForm()">
-                                                    <i class="fas fa-redo mr-2"></i>Reset
-                                                </button>
                                                 <button type="submit" class="btn btn-orange rounded-pill px-4 shadow-sm"
                                                     id="submitBtn" disabled>
                                                     <i class="fas fa-{{ $data ? 'save' : 'user-plus' }} mr-2"></i>

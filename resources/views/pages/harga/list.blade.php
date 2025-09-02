@@ -106,7 +106,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-tools">
-                                        <a href="/bank/harga/create" class="text-decoration-none">
+                                        <a href="/admin/bank/harga/create" class="text-decoration-none">
                                             <button class="btn btn-light btn-sm rounded-pill shadow-sm" type="button">
                                                 <i class="fas fa-plus mr-1"></i> Tambah Data
                                             </button>
@@ -208,7 +208,7 @@
                                                     </td>
                                                     <td class="py-4 text-center">
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ url('bank/harga/edit/' . $val->id) }}"
+                                                            <a href="{{ url('admin/bank/harga/edit/' . $val->id) }}"
                                                                 class="btn btn-outline-primary btn-sm rounded-pill px-3"
                                                                 title="Edit Data">
                                                                 <i class="fas fa-edit mr-1"></i> Edit

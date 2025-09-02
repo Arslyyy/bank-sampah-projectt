@@ -64,7 +64,7 @@
 
                             <!-- Form Body -->
                             <form class="form-horizontal"
-                                action="{{ request()->is('bank/harga/create') ? url('bank/harga/store') : url('bank/harga/update', $data->id) }}"
+                                action="{{ request()->is('admin/bank/harga/create') ? url('admin/bank/harga/store') : url('admin/bank/harga/update', $data->id) }}"
                                 method="POST" enctype="multipart/form-data" id="hargaForm">
                                 @csrf
                                 @if ($data)
@@ -251,15 +251,10 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex justify-content-end">
-                                                <a href="/bank/harga"
+                                                <a href="/admin/bank/harga"
                                                     class="btn btn-outline-secondary rounded-pill mr-2 px-4">
                                                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                                                 </a>
-                                                <button type="reset"
-                                                    class="btn btn-outline-warning rounded-pill mr-2 px-4"
-                                                    onclick="resetForm()">
-                                                    <i class="fas fa-redo mr-2"></i>Reset
-                                                </button>
                                                 <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm"
                                                     id="submitBtn" disabled>
                                                     <i class="fas fa-{{ $data ? 'save' : 'plus' }} mr-2"></i>

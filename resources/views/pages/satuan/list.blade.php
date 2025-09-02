@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="d-flex justify-content-end">
-                                            <a href="/bank/satuan/create" class="btn btn-light btn-sm shadow-sm">
+                                            <a href="/admin/bank/satuan/create" class="btn btn-light btn-sm shadow-sm">
                                                 <i class="fas fa-plus mr-1"></i>
                                                 Tambah Data Satuan
                                             </a>
@@ -116,7 +116,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ url('bank/satuan/edit/' . $val->id) }}"
+                                                            <a href="{{ url('admin/bank/satuan/edit/' . $val->id) }}"
                                                                 class="btn btn-warning btn-sm" data-toggle="tooltip"
                                                                 title="Edit Data">
                                                                 <i class="fas fa-edit"></i>
@@ -137,7 +137,7 @@
                                                             <h5 class="text-muted mt-3">Belum Ada Data Satuan</h5>
                                                             <p class="text-muted">Silakan tambahkan data satuan terlebih
                                                                 dahulu</p>
-                                                            <a href="/bank/satuan/create" class="btn btn-primary">
+                                                            <a href="/adminn/bank/satuan/create" class="btn btn-primary">
                                                                 <i class="fas fa-plus mr-1"></i>
                                                                 Tambah Data Pertama
                                                             </a>
@@ -217,8 +217,9 @@
 @push('scripts')
     <script>
         function confirmDelete(id) {
-            $('#deleteForm').attr('action', `/bank/satuan/delete/${id}`);
-            $('#deleteModal').modal('show');
+        let url = "{{ url('admin/bank/satuan') }}/" + id;
+        $('#deleteForm').attr('action', url);
+        $('#deleteModal').modal('show');
         }
 
         $(document).ready(function() {

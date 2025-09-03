@@ -24,7 +24,7 @@ class TransaksiNasabah extends Model
     ];
 
     protected $casts = [
-    'tanggal_transaksi' => 'date',
+        'tanggal_transaksi' => 'date',
     ];
 
     // Relasi ke nasabah
@@ -45,5 +45,30 @@ class TransaksiNasabah extends Model
         return $this->belongsTo(MasterSatuan::class, 'master_satuan_id');
     }
 
-    
+    // Scope untuk filter berdasarkan jenis transaksi
+    public function scopePemasukan($query)
+    {
+        return $query->where('jenis', 'pemasukan');
+    }
+
+    public function scopePengeluaran($query)
+    {
+        return $query->where('jenis', 'pengeluaran');
+    }
+
+    // Scope untuk filter berdasarkan bulan
+    public function scopeBulanIni($query)
+    {
+        return $query->whereMonth('tanggal_transaksi', now()->month)
+            ->whereYear('tanggal_transaksi', now()->year);
+    }
+
+    // Accessor untuk mendapatkan nilai transaksi (jumlah * harga)
+    public function getNilaiTransaksiAttribute()
+    {
+        $harga = $this->hargaSampah ? $this->hargaSampah->harga_sampah : 0;
+        return $this->jumlah * $harga;
+    }
+
+
 }

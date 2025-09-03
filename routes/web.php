@@ -102,7 +102,7 @@ Route::middleware(['auth', 'role:nasabah'])->prefix('nasabah')->group(function (
     Route::get('/dashboard', [HomeNasabahController::class, 'index'])->name('nasabah.dashboard');
 });
 Route::middleware(['auth', 'role:nasabah'])->prefix('nasabah')->group(function () {
-Route::get('/dashboard', [DashboardNasabahController::class, 'index'])->name('nasabah.dashboard');
+// Route::get('/dashboard', [DashboardNasabahController::class, 'index'])->name('nasabah.dashboard');
 
 // Transaksi pengeluaran milik nasabah
 Route::get('/pengeluaran', [DashboardNasabahController::class, 'pengeluaran'])->name('nasabah.pengeluaran.index');

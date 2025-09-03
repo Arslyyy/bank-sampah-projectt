@@ -410,5 +410,37 @@
     });
 });
 
+// Fungsi tambah form khusus pengeluaran
+function tambahForm() {
+    let container = document.getElementById('form-container');
+    let firstForm = container.querySelector('.pengeluaran-form');
+    let newForm = firstForm.cloneNode(true);
+
+    // Reset semua input & select
+    newForm.querySelectorAll('input, textarea').forEach(el => {
+        if (el.type === "hidden") {
+            el.value = 0; // reset hidden field seperti harga & total
+        } else {
+            el.value = "";
+        }
+    });
+    newForm.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+
+    // Generate ID transaksi baru
+    let idField = newForm.querySelector('input[name="id_transaksi[]"]');
+    if (idField) idField.value = generateIdTransaksi();
+
+    // Reset tampilan harga & total
+    newForm.querySelector('.harga-sampah').value = "Rp 0";
+    newForm.querySelector('.total').value = "Rp 0";
+
+    // Tampilkan tombol hapus
+    let removeBtn = newForm.querySelector('.remove-form');
+    if (removeBtn) removeBtn.style.display = "inline-block";
+
+    // Tambahkan ke container
+    container.appendChild(newForm);
+}
+
 </script>
 @endsection

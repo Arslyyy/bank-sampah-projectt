@@ -13,21 +13,36 @@
   </div>
 
   <!-- Filter Form -->
-  <section class="content">
-    <div class="container-fluid mb-3">
-      <form method="GET" action="{{ route('pemasukkan.index') }}" class="form-inline align-items-center">
-        <!-- Cari ID Transaksi -->
-        <label for="id_transaksi" class="mr-2 font-weight-bold text-success">ID Transaksi:</label>
-        <input type="text" name="id_transaksi" id="id_transaksi"
-              value="{{ request('id_transaksi') }}"
-              class="form-control mr-3"
-              placeholder="Cari ID Transaksi">
+<section class="content">
+  <div class="container-fluid mb-3">
+    <form method="GET" action="{{ route('pemasukkan.index') }}" class="form-inline align-items-center">
+      <!-- Filter Bulan -->
+      <label for="bulan" class="mr-2 font-weight-bold text-success">Bulan:</label>
+      <select name="bulan" id="bulan" class="form-control mr-3">
+        <option value="">-- Semua Bulan --</option>
+        @foreach(range(1, 12) as $m)
+          <option value="{{ $m }}" {{ request('bulan') == $m ? 'selected' : '' }}>
+            {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+          </option>
+        @endforeach
+      </select>
 
-        <button type="submit" class="btn btn-success mr-2">Filter</button>
-        <a href="{{ route('pemasukkan.index') }}" class="btn btn-secondary">Reset</a>
-      </form>
-    </div>
-  </section>
+      <!-- Filter Tahun -->
+      <label for="tahun" class="mr-2 font-weight-bold text-success">Tahun:</label>
+      <select name="tahun" id="tahun" class="form-control mr-3">
+        <option value="">-- Semua Tahun --</option>
+        @for($y = date('Y'); $y >= 2020; $y--)
+          <option value="{{ $y }}" {{ request('tahun') == $y ? 'selected' : '' }}>
+            {{ $y }}
+          </option>
+        @endfor
+      </select>
+
+      <button type="submit" class="btn btn-success mr-2">Filter</button>
+      <a href="{{ route('pemasukkan.index') }}" class="btn btn-secondary">Reset</a>
+    </form>
+  </div>
+</section>
 
   <!-- Main content -->
   <section class="content">

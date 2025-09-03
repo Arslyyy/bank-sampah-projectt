@@ -10,18 +10,24 @@ use Illuminate\Support\Facades\Storage;
 class PemasukkanController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = TransaksiNasabah::where('jenis', 'pemasukan');
+{
+    // Ambil data pemasukan
+    $query = TransaksiNasabah::where('jenis', 'pemasukan');
 
-        // Filter ID Transaksi
-        if ($request->filled('id_transaksi')) {
-            $query->where('id_transaksi', 'like', '%' . $request->id_transaksi . '%');
-        }
-
-        $data = $query->orderBy('tanggal_transaksi', 'desc')->paginate(10);
-
-        return view('pages.transaksi.pemasukan.list', compact('data'));
+    // Filter Bulan
+    if ($request->filled('bulan')) {
+        $query->whereMonth('tanggal_transaksi', $request->bulan);
     }
+
+    // Filter Tahun
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal_transaksi', $request->tahun);
+    }
+
+    $data = $query->orderBy('tanggal_transaksi', 'desc')->paginate(10);
+
+    return view('pages.transaksi.pemasukan.list', compact('data'));
+}
 
     public function create()
     {

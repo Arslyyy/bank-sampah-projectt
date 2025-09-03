@@ -16,19 +16,38 @@ class PengeluaranNasabahController extends Controller
      * Tampilkan daftar pengeluaran
      */
     public function index(Request $request)
-    {
-        $query = TransaksiNasabah::with(['nasabah', 'jenisSampah', 'satuan'])
-            ->where('jenis', 'pengeluaran');
-        
-        // 🔍 Filter ID Transaksi
-        if ($request->filled('id_transaksi')) {
-            $query->where('id_transaksi', 'like', '%' . $request->id_transaksi . '%');
-        }
+{
+    $query = TransaksiNasabah::with(['nasabah', 'jenisSampah'])
+                ->where('jenis', 'pengeluaran');
 
-        $data = $query->orderBy('created_at', 'desc')->paginate(10);
-
-        return view('pages.transaksi.pengeluaran.list', compact('data'));
+    // Filter Bulan
+    if ($request->filled('bulan')) {
+        $query->whereMonth('tanggal_transaksi', $request->bulan);
     }
+
+    // Filter Tahun
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal_transaksi', $request->tahun);
+    }
+
+    // Filter Nama Nasabah
+    if ($request->filled('nasabah')) {
+        $query->whereHas('nasabah', function($q) use ($request) {
+            $q->where('nama', 'like', '%' . $request->nasabah . '%');
+        });
+    }
+
+    // Filter Jenis Sampah
+    if ($request->filled('jenis_sampah')) {
+        $query->whereHas('jenisSampah', function($q) use ($request) {
+            $q->where('type_sampah', 'like', '%' . $request->jenis_sampah . '%');
+        });
+    }
+
+    $data = $query->orderBy('tanggal_transaksi', 'desc')->paginate(10);
+
+    return view('pages.transaksi.pengeluaran.list', compact('data'));
+}
 
     /**
      * Form tambah pengeluaran

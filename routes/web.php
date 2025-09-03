@@ -11,9 +11,11 @@ use App\Http\Controllers\MasterJenisSampahController;
 use App\Http\Controllers\MasterHargaSampahController;
 use App\Http\Controllers\DataTransaksiController;
 use App\Http\Controllers\DashboardNasabahController;
-use App\Http\Controllers\NotaController;
 use App\Http\Controllers\TransaksiNasabahController;
+
 use Illuminate\Support\Facades\Route;
+
+
 
 // Default route → redirect ke login
 Route::get('/', function () {
@@ -102,17 +104,16 @@ Route::middleware(['auth', 'role:nasabah'])->prefix('nasabah')->group(function (
     Route::get('/dashboard', [HomeNasabahController::class, 'index'])->name('nasabah.dashboard');
 });
 Route::middleware(['auth', 'role:nasabah'])->prefix('nasabah')->group(function () {
-// Route::get('/dashboard', [DashboardNasabahController::class, 'index'])->name('nasabah.dashboard');
+    // Route::get('/dashboard', [DashboardNasabahController::class, 'index'])->name('nasabah.dashboard');
 
-// Transaksi pengeluaran milik nasabah
-Route::get('/pengeluaran', [DashboardNasabahController::class, 'pengeluaran'])->name('nasabah.pengeluaran.index');
+    // Transaksi pengeluaran milik nasabah
+    Route::get('/pengeluaran', [DashboardNasabahController::class, 'pengeluaran'])->name('nasabah.pengeluaran.index');
 });
 
 
 // ambil harga
 Route::get('/get-harga/{id}', [PengeluaranNasabahController::class, 'getHarga']);
 
-// web.php
 Route::post('/nota/show', [TransaksiNasabahController::class, 'showNota'])->name('nota.show');
 
 require __DIR__ . '/auth.php';

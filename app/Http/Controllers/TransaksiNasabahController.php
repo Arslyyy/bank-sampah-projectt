@@ -14,11 +14,22 @@ class TransaksiNasabahController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $datas = TransaksiNasabah::all();
-        return view('pages.transaksi.list', compact('datas'));
+    public function index(Request $request)
+{
+    $query = TransaksiNasabah::with(['nasabah', 'jenisSampah']); 
+
+    if ($request->filled('bulan')) {
+        $query->whereMonth('tanggal_transaksi', $request->bulan);
     }
+
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal_transaksi', $request->tahun);
+    }
+
+    $datas = $query->orderBy('tanggal_transaksi', 'desc')->paginate(10);
+
+    return view('pages.transaksi.list', compact('datas'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -120,5 +131,20 @@ public function store(Request $request)
         $transaksi = TransaksiNasabah::findOrFail($id);
         $transaksi->delete();
         return redirect()->route('transaksi.index')->with(['success' => 'Data Berhasil Di Hapus!']);
+    }
+
+    public function showNota(Request $request)
+    {
+        $request->validate([
+            'nasabah_id' => 'required|exists:users,nasabah_id',
+            'tanggal' => 'required|date',
+        ]);
+
+        $transaksi = TransaksiNasabah::with(['nasabah', 'jenisSampah'])
+            ->where('master_nasabah_id', $request->nasabah_id)
+            ->where('tanggal_transaksi', $request->tanggal)
+            ->get();
+
+        return response()->json($transaksi);
     }
 }

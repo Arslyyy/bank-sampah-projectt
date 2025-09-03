@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b
+class ComposerStaticInit7cc52a43227dcffaf239185a88905199
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -331,13 +331,13 @@ class ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            1 => __DIR__ . '/..' . '/spatie/ignition/src',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -373,8 +373,8 @@ class ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -602,8 +602,10 @@ class ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b
         'App\\Http\\Controllers\\Auth\\RegisteredUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisteredUserController.php',
         'App\\Http\\Controllers\\Auth\\VerifyEmailController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerifyEmailController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\DashboardNasabahController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardNasabahController.php',
         'App\\Http\\Controllers\\DataTransaksiController' => __DIR__ . '/../..' . '/app/Http/Controllers/DataTransaksiController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\HomeNasabahController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeNasabahController.php',
         'App\\Http\\Controllers\\MasterHargaSampahController' => __DIR__ . '/../..' . '/app/Http/Controllers/MasterHargaSampahController.php',
         'App\\Http\\Controllers\\MasterJenisSampahController' => __DIR__ . '/../..' . '/app/Http/Controllers/MasterJenisSampahController.php',
         'App\\Http\\Controllers\\MasterNasabahController' => __DIR__ . '/../..' . '/app/Http/Controllers/MasterNasabahController.php',
@@ -617,6 +619,7 @@ class ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
+        'App\\Http\\Middleware\\RoleMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/RoleMiddleware.php',
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustHosts' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustHosts.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
@@ -7739,10 +7742,10 @@ class ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitf7b04ff3bba8d50cb638e5dbed55b57b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7cc52a43227dcffaf239185a88905199::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7cc52a43227dcffaf239185a88905199::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit7cc52a43227dcffaf239185a88905199::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit7cc52a43227dcffaf239185a88905199::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -243,9 +243,10 @@
   </div>
 </div>
 
-
 @push('scripts')
+<!-- Ganti dengan library yang diperlukan untuk PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.btn-delete').forEach(function(button) {
@@ -259,7 +260,7 @@
     });
   });
 
-  // NOTA
+  // NOTA - dengan download PDF
   document.getElementById('notaForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -313,7 +314,7 @@
                  <p class="text-center text-muted small mt-3">Terima kasih atas transaksi Anda!</p>
                  <button id="downloadNota" class="btn btn-success btn-sm mt-2" 
                     data-nasabah="${nasabahId}" data-tanggal="${tanggal}">
-                    <i class="fas fa-download"></i> Unduh Nota
+                    <i class="fas fa-download"></i> Unduh Nota (PDF)
                  </button>
                  </div>`;
         } else {
@@ -321,25 +322,41 @@
         }
         document.getElementById('notaResult').innerHTML = html;
 
-        // tambahkan event listener setelah tombol dibuat
+        // Tambahkan event listener untuk download PDF
         document.getElementById('downloadNota')?.addEventListener('click', function() {
-          const notaElement = document.getElementById('notaContent');
           const nasabahId = this.getAttribute('data-nasabah');
           const tanggal = this.getAttribute('data-tanggal');
-
-          // sembunyikan tombol
+          const nasabahName = document.getElementById('nasabah_id').selectedOptions[0].text;
+          
+          // Sembunyikan tombol sementara
           this.style.display = 'none';
-
-          html2canvas(notaElement, {
-            scale: 2
+          
+          // Gunakan html2canvas untuk menangkap konten sebagai gambar
+          html2canvas(document.getElementById('notaContent'), {
+            scale: 2,
+            useCORS: true,
+            logging: false
           }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `nota_${nasabahId}_${tanggal}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-
-            // tampilkan kembali tombol
+            // Kembalikan tombol
             this.style.display = 'inline-block';
+            
+            // Buat PDF
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            
+            // Hitung dimensi gambar untuk muat di halaman PDF
+            const imgWidth = pageWidth - 20; // Margin 10mm di kiri dan kanan
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            // Tambahkan gambar ke PDF
+            doc.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight);
+            
+            // Simpan PDF
+            doc.save(`nota_${nasabahName}_${tanggal}.pdf`);
           });
         });
       });

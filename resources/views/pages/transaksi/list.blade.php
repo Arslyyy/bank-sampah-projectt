@@ -57,7 +57,7 @@
                                 @endfor
                             </select>
                         </div>
-                        <div class="col-md-4 mt-4 mt-md-0 d-flex align-items-center">
+                        <div class="col-md-4 mt-4 mt-md-2 d-flex align-items-center">
                             <button type="submit" class="btn btn-info btn-sm shadow-sm mr-2 px-4">Filter</button>
                             <a href="{{ route('transaksi.index') }}" class="btn btn-outline-secondary btn-sm px-4 shadow-sm">Reset</a>
                         </div>
@@ -65,7 +65,7 @@
 
                     {{-- Tombol Download Excel --}}
                     @if(request()->filled('bulan'))
-                        <div class="mt-3">
+                        <div class="mt-2">
                             <a href="{{ route('transaksi.export', ['bulan' => request('bulan'), 'tahun' => request('tahun')]) }}"
                                class="btn btn-info shadow-sm">
                                 <i class="fas fa-file-excel mr-1"></i> Download Excel

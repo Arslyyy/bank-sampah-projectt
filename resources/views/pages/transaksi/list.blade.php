@@ -70,6 +70,10 @@
                                class="btn btn-info shadow-sm">
                                 <i class="fas fa-file-excel mr-1"></i> Download Excel
                             </a>
+                            <a href="{{ route('pengeluaran.exportPdf', request()->all()) }}" 
+   class="btn btn-danger btn-md shadow-sm">
+  <i class="fas fa-file-pdf"></i> Download PDF
+</a>
                         </div>
                     @endif
                 </div>

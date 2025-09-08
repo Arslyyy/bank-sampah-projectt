@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DataTransaksiController extends Controller
 {
@@ -172,5 +173,39 @@ class DataTransaksiController extends Controller
         }, $filename, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ]);
+    }
+     public function exportPdf(Request $request)
+    {
+        $query = TransaksiNasabah::query();
+
+        if ($request->filled('nasabah')) {
+            $query->whereHas('nasabah', function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->nasabah . '%');
+            });
+        }
+
+        if ($request->filled('bulan')) {
+            $query->whereMonth('tanggal_transaksi', $request->bulan);
+        }
+        if ($request->filled('tahun')) {
+            $query->whereYear('tanggal_transaksi', $request->tahun);
+        }
+
+        $data = $query->orderBy('tanggal_transaksi', 'asc')->get();
+
+        $bulanNama = Carbon::createFromDate(
+            $request->tahun ?? now()->year,
+            $request->bulan ?? now()->month,
+            1
+        )->translatedFormat('F Y');
+
+        $totalMasuk = $data->where('jenis', 'pemasukan')->sum('jumlah');
+        $totalKeluar = $data->where('jenis', 'pengeluaran')->sum('jumlah');
+        $saldo = $totalMasuk - $totalKeluar;
+
+        $pdf = Pdf::loadView('pages.transaksi.pdf', compact('data', 'bulanNama', 'totalMasuk', 'totalKeluar', 'saldo'))
+                  ->setPaper('a4', 'landscape');
+
+        return $pdf->download("buku_kas_{$bulanNama}.pdf");
     }
 }

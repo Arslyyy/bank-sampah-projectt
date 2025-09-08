@@ -95,6 +95,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Data Transaksi
     Route::get('transaksi/data', [DataTransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('transaksi/export', [DataTransaksiController::class, 'export'])->name('transaksi.export');
+    Route::get('pengeluaran/export', [DataTransaksiController::class, 'exportPdf'])->name('pengeluaran.exportPdf');
 });
 
 // ====================

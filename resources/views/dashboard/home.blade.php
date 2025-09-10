@@ -131,17 +131,21 @@
                 <div class="col-12">
                     <div class="card shadow-lg border-0 rounded-lg">
                         <div class="card-header bg-gradient-dark text-white">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h3 class="card-title mb-0"><i class="fas fa-history mr-2"></i>Transaksi Terbaru
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                                <!-- Judul -->
+                                <div class="mb-2 mb-sm-0">
+                                    <h3 class="card-title mb-0">
+                                        <i class="fas fa-history mr-2"></i>Transaksi Terbaru
                                     </h3>
                                 </div>
-                                <div class="d-flex align-items-center">
+
+                                <!-- Filter + Tombol -->
+                                <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center">
                                     <!-- Filter Form -->
-                                    <form method="GET" action="{{ url()->current() }}" class="form-inline mr-3">
-                                        <div class="input-group input-group-sm">
-                                            <select name="jenis_sampah" class="form-control"
-                                                onchange="this.form.submit()">
+                                    <form method="GET" action="{{ url()->current() }}"
+                                        class="form-inline mb-2 mb-sm-0 mr-sm-3 w-100 w-sm-auto">
+                                        <div class="input-group input-group-sm w-100">
+                                            <select name="jenis_sampah" class="form-control" onchange="this.form.submit()">
                                                 <option value="">Semua Jenis Sampah</option>
                                                 @foreach ($jenisSampahList as $jenisSampah)
                                                 <option value="{{ $jenisSampah->id }}"
@@ -152,22 +156,25 @@
                                             </select>
                                             <div class="input-group-append">
                                                 @if ($filterJenisSampah)
-                                                <a href="{{ url()->current() }}"
-                                                    class="btn btn-outline-light btn-sm">
+                                                <a href="{{ url()->current() }}" class="btn btn-outline-light btn-sm">
                                                     <i class="fas fa-times"></i>
                                                 </a>
                                                 @endif
                                             </div>
                                         </div>
                                     </form>
-                                    <span class="badge badge-light">{{ $transaksiTerbaruData->count() }}
-                                        transaksi</span>
-                                    <button type="button" class="btn btn-secondary btn-sm shadow-sm ml-3" data-toggle="modal" data-target="#notaModal">
+
+                                    <!-- Tombol Nota -->
+                                    <button type="button" class="btn btn-secondary btn-sm shadow-sm w-100 w-sm-auto"
+                                        data-toggle="modal" data-target="#notaModal">
                                         <i class="fas fa-file-alt"></i> Nota
                                     </button>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- <span class="badge badge-light">{{ $transaksiTerbaruData->count() }}
+                                        transaksi</span> -->
                         <div class="card-body p-0">
                             @if ($transaksiTerbaruData->count() > 0)
                             <div class="table-responsive">

@@ -43,7 +43,7 @@
                                     <h3 class="font-weight-bold mb-0">{{ $totalTransaksi }}</h3>
                                     <small>Total Transaksi</small>
                                 </div>
-                                <div>
+                                <div>x
                                     <i class="fas fa-exchange-alt fa-2x opacity-75"></i>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Jenis Sampah</th>
-                                            <th>Satuan</th>
+                                            <th>Harga</th>
                                             <th>Berat</th>
                                             <th class="text-right">Total</th>
                                         </tr>
@@ -199,13 +199,16 @@
                                                 <span
                                                     class="font-weight-bold">{{ $transaksi->jenisSampah->type_sampah ?? '-' }}</span>
                                             </td>
-                                            <td>
-                                                <span
-                                                    class="badge badge-secondary">{{ $transaksi->satuan->satuan ?? '-' }}</span>
-                                            </td>
-                                            <td>{{ number_format($transaksi->jumlah_berat, 2) }}</td>
+                                          <td>
+    <span class="badge badge-success">
+        {{ $transaksi->hargaSampah ? 'Rp ' . number_format($transaksi->hargaSampah->harga_sampah, 0, ',', '.') : '-' }}
+    </span>
+</td>
+
+
+                                            <td>{{ number_format($transaksi->jumlah_berat, 1) }}</td>
                                             <td class="text-right font-weight-bold text-success">
-                                                {{ number_format($transaksi->jumlah, 0, ',', '.') }}
+                                                {{ 'Rp ' . number_format($transaksi->jumlah, 0, ',', '.') }}
                                             </td>
                                         </tr>
                                         @endforeach
@@ -501,19 +504,15 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {
-                    !!json_encode($chartData['labels']) !!
-                },
+                labels: {!! json_encode($chartData['labels']) !!},
                 datasets: [{
                     label: 'Pemasukan',
-                    data: {
-                        !!json_encode($chartData['pemasukan']) !!
-                    },
+                    data: {!! json_encode($chartData['pemasukan']) !!},
                     borderColor: 'rgb(75, 192, 192)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     tension: 0.1,
                     fill: false
-                }, ]
+                }]
             },
             options: {
                 responsive: true,
@@ -552,4 +551,5 @@
     });
 </script>
 @endif
+
 @endsection

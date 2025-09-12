@@ -6,7 +6,9 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-sm-6">
-                    <h1 class="font-weight-bold text-info"><i class="fas fa-file-invoice-dollar mr-2"></i>Data Transaksi</h1>
+                    <h1 class="font-weight-bold text-info">
+                        <i class="fas fa-file-invoice-dollar mr-2"></i> Data Transaksi
+                    </h1>
                 </div>
             </div>
         </div>
@@ -25,15 +27,15 @@
                 </div>
             @endif
 
-            {{-- Filter Nama Nasabah,Bulan & Tahun --}}
+            {{-- Filter Nama Nasabah, Bulan & Tahun --}}
             <div class="card shadow-sm mb-4 border-info">
                 <div class="card-body">
                     <form method="GET" action="{{ route('transaksi.index') }}" class="form-row align-items-center">
-                         <div class="col-md-4 mb-2 mb-md-0">
+                        <div class="col-md-4 mb-2 mb-md-0">
                             <label for="nasabah" class="font-weight-bold text-info">Cari Nama Nasabah</label>
-                                <input type="text" name="nasabah" id="nasabah" 
-                                    class="form-control form-control-sm shadow-sm"
-                                    value="{{ request('nasabah') }}" placeholder="Ketik nama nasabah...">
+                            <input type="text" name="nasabah" id="nasabah" 
+                                class="form-control form-control-sm shadow-sm"
+                                value="{{ request('nasabah') }}" placeholder="Ketik nama nasabah...">
                         </div>
                         <div class="col-md-4 mb-2 mb-md-0">
                             <label for="bulan" class="font-weight-bold text-info">Pilih Bulan</label>
@@ -58,22 +60,26 @@
                             </select>
                         </div>
                         <div class="col-md-4 mt-4 mt-md-2 d-flex align-items-center">
-                            <button type="submit" class="btn btn-info btn-sm shadow-sm mr-2 px-4">Filter</button>
-                            <a href="{{ route('transaksi.index') }}" class="btn btn-outline-secondary btn-sm px-4 shadow-sm">Reset</a>
+                            <button type="submit" class="btn btn-info btn-sm shadow-sm mr-2 px-4">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <a href="{{ route('transaksi.index') }}" class="btn btn-outline-secondary btn-sm px-4 shadow-sm">
+                                <i class="fas fa-undo"></i> Reset
+                            </a>
                         </div>
                     </form>
 
-                    {{-- Tombol Download Excel --}}
+                    {{-- Tombol Download --}}
                     @if(request()->filled('bulan'))
-                        <div class="mt-2">
+                        <div class="mt-3">
                             <a href="{{ route('transaksi.export', ['bulan' => request('bulan'), 'tahun' => request('tahun')]) }}"
-                               class="btn btn-info shadow-sm">
+                               class="btn btn-success btn-sm shadow-sm mr-2">
                                 <i class="fas fa-file-excel mr-1"></i> Download Excel
                             </a>
                             <a href="{{ route('pengeluaran.exportPdf', request()->all()) }}" 
-   class="btn btn-danger btn-md shadow-sm">
-  <i class="fas fa-file-pdf"></i> Download PDF
-</a>
+                               class="btn btn-danger btn-sm shadow-sm">
+                                <i class="fas fa-file-pdf mr-1"></i> Download PDF
+                            </a>
                         </div>
                     @endif
                 </div>
@@ -82,45 +88,58 @@
             {{-- Table --}}
             <div class="card shadow-sm border-info rounded-lg">
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover table-striped mb-0 text-nowrap">
+                    <table class="table table-hover table-striped mb-0 text-nowrap align-middle">
                         <thead class="bg-info text-white text-uppercase small">
                             <tr>
-                                <th style="width: 60px;">No</th>
-                                <th style="width: 60px;">Id Transaksi</th>
-                                <th style="min-width: 180px;">Nama Nasabah</th>
-                                <th style="min-width: 110px;">Tanggal</th>
-                                <th style="min-width: 120px;">Jenis</th>
-                                <th class="text-right" style="min-width: 140px;">Jumlah</th>
-                                <th style="min-width: 200px;">Uraian/Keterangan</th>
+                                <th style="width: 60px;"><i class="fas fa-hashtag"></i> No</th>
+                                <th style="width: 80px;"><i class="fas fa-receipt"></i> ID</th>
+                                <th style="min-width: 180px;"><i class="fas fa-user"></i> Nasabah</th>
+                                <th style="min-width: 120px;"><i class="fas fa-calendar-alt"></i> Tanggal</th>
+                                <th style="min-width: 120px;"><i class="fas fa-random"></i> Jenis</th>
+                                <th class="text-right" style="min-width: 140px;"><i class="fas fa-coins"></i> Jumlah</th>
+                                <th style="min-width: 220px;"><i class="fas fa-sticky-note"></i> Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($data as $val)
                                 <tr>
-                                    <td class="align-middle font-weight-bold">{{ $loop->iteration + ($data->currentPage()-1)*$data->perPage() }}</td>
-                                    <td class="align-middle font-monospace">
-                                        <i class="fas fa-receipt text-primary mr-1"></i> {{ $val->id_transaksi }}
+                                    <td class="text-center font-weight-bold">
+                                        {{ $loop->iteration + ($data->currentPage()-1)*$data->perPage() }}
                                     </td>
-                                    <td class="align-middle">{{ $val->nasabah->nama ?? '-' }}</td>
-                                    <td class="align-middle font-monospace">{{ \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y') }}</td>
-                                    <td class="align-middle">
+                                    <td class="font-monospace text-primary">
+                                        <i class="fas fa-barcode mr-1"></i>{{ $val->id_transaksi }}
+                                    </td>
+                                    <td>{{ $val->nasabah->nama ?? '-' }}</td>
+                                    <td class="font-monospace">
+                                        <i class="fas fa-clock text-muted mr-1"></i>
+                                        {{ \Carbon\Carbon::parse($val->tanggal_transaksi)->format('d/m/Y') }}
+                                    </td>
+                                    <td>
                                         @if($val->jenis == 'pemasukan')
-                                            <span class="badge badge-success px-3 py-2 shadow-sm">Pemasukan</span>
+                                            <span class="badge badge-success px-3 py-2 shadow-sm">
+                                                <i class="fas fa-arrow-down mr-1"></i>Pemasukan
+                                            </span>
                                         @elseif($val->jenis == 'pengeluaran')
-                                            <span class="badge badge-danger px-3 py-2 shadow-sm">Pengeluaran</span>
+                                            <span class="badge badge-danger px-3 py-2 shadow-sm">
+                                                <i class="fas fa-arrow-up mr-1"></i>Pengeluaran
+                                            </span>
                                         @else
-                                            <span class="badge badge-secondary px-3 py-2 shadow-sm">{{ ucfirst($val->jenis) }}</span>
+                                            <span class="badge badge-secondary px-3 py-2 shadow-sm">
+                                                <i class="fas fa-exchange-alt mr-1"></i>{{ ucfirst($val->jenis) }}
+                                            </span>
                                         @endif
                                     </td>
-                                    <td class="align-middle text-right font-weight-bold 
+                                    <td class="text-right font-weight-bold 
                                         {{ $val->jenis == 'pemasukan' ? 'text-success' : ($val->jenis == 'pengeluaran' ? 'text-danger' : '') }}">
                                         {{ $val->jumlah !== null ? 'Rp ' . number_format($val->jumlah, 0, ',', '.') : '-' }}
                                     </td>
-                                    <td class="align-middle text-truncate" style="max-width: 280px;">{{ $val->uraian ?? '-' }}</td>
+                                    <td class="text-truncate" style="max-width: 280px;">
+                                        <i class="fas fa-quote-left text-muted mr-1"></i>{{ $val->uraian ?? '-' }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted py-5 font-italic">
+                                    <td colspan="7" class="text-center text-muted py-5 font-italic">
                                         <i class="fas fa-info-circle"></i> Belum ada data transaksi
                                     </td>
                                 </tr>
@@ -129,7 +148,7 @@
                     </table>
                 </div>
 
-                {{-- Pagination --}}
+                {{-- Pagination + Total --}}
                 <div class="card-footer d-flex justify-content-between align-items-center flex-wrap">
                     <div>
                         {{ $data->links() }}
@@ -140,28 +159,30 @@
                         @php
                             $sisaSaldo = $totalPemasukan - $totalPengeluaran;
                         @endphp
-                        <div class="font-weight-bold text-dark mt-3 mt-md-0">
+                        <div class="bg-light border rounded px-4 py-2 shadow-sm mt-3 mt-md-0">
                             <span class="mr-4">
-                                Total Pemasukan: 
-                                <span class="text-success">
+                                <i class="fas fa-arrow-down text-success"></i> 
+                                Pemasukan: 
+                                <span class="text-success font-weight-bold">
                                     Rp {{ number_format($totalPemasukan, 0, ',', '.') }}
                                 </span>
                             </span>
                             <span class="mr-4">
-                                Total Pengeluaran: 
-                                <span class="text-danger">
+                                <i class="fas fa-arrow-up text-danger"></i> 
+                                Pengeluaran: 
+                                <span class="text-danger font-weight-bold">
                                     Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
                                 </span>
                             </span>
                             <span>
+                                <i class="fas fa-wallet text-primary"></i> 
                                 Sisa Saldo: 
-                                <span class="{{ $sisaSaldo >= 0 ? 'text-primary' : 'text-warning' }}">
+                                <span class="{{ $sisaSaldo >= 0 ? 'text-primary' : 'text-warning' }} font-weight-bold">
                                     Rp {{ number_format($sisaSaldo, 0, ',', '.') }}
                                 </span>
                             </span>
                         </div>
                     @endif
-
                 </div>
             </div>
 
@@ -170,36 +191,26 @@
 </div>
 
 <style>
-    .font-monospace {
-        font-family: 'Courier New', Courier, monospace;
+    .table thead th {
+        font-weight: 700;
+        letter-spacing: .5px;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f1faff !important;
+        transition: background-color 0.3s ease;
+    }
+    .badge {
+        font-size: 0.8rem;
+        border-radius: 0.4rem;
+    }
+    .table td, .table th {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
     }
     .text-truncate {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-    .table-hover tbody tr:hover {
-        background-color: #e0f7fa !important; /* biru muda */
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .badge {
-        font-size: 0.9rem;
-        border-radius: 0.4rem;
-        font-weight: 600;
-    }
-    .alert {
-        font-size: 1rem;
-        border-radius: 0.3rem;
-    }
-    .btn-outline-secondary:hover {
-        background-color: #d6d6d6;
-        transition: background-color 0.3s ease;
-    }
-    form .form-control:focus {
-        box-shadow: 0 0 8px #17a2b8; /* biru info */
-        border-color: #17a2b8;
-        outline: none;
     }
 </style>
 @endsection

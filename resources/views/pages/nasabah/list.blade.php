@@ -53,18 +53,6 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h3>{{ collect($datas)->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->count() ?? 5 }}
-                                </h3>
-                                <p>Pendaftar Bulan Ini</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
                         <div class="small-box bg-danger">
                             <div class="inner">
                                 <h3>{{ collect($datas)->where('status', 'nonaktif')->count() ?? 0 }}</h3>
@@ -95,29 +83,6 @@
                                                 <i class="fas fa-user-plus mr-1"></i>
                                                 Tambah Nasabah Baru
                                             </a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button"
-                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    <i class="fas fa-cog mr-1"></i>
-                                                    Aksi
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#" onclick="exportData('excel')">
-                                                        <i class="fas fa-file-excel text-success mr-2"></i>
-                                                        Export Excel
-                                                    </a>
-                                                    <a class="dropdown-item" href="#" onclick="exportData('pdf')">
-                                                        <i class="fas fa-file-pdf text-danger mr-2"></i>
-                                                        Export PDF
-                                                    </a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" onclick="printData()">
-                                                        <i class="fas fa-print text-info mr-2"></i>
-                                                        Cetak Data
-                                                    </a>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -243,27 +208,22 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-center">
-                                                        @php
-                                                            $status = $val->status ?? 'aktif';
-                                                            $badgeClass =
-                                                                $status == 'aktif' ? 'badge-success' : 'badge-danger';
-                                                            $icon =
-                                                                $status == 'aktif'
-                                                                    ? 'fas fa-check-circle'
-                                                                    : 'fas fa-times-circle';
-                                                        @endphp
-                                                        <span class="badge {{ $badgeClass }} badge-pill px-3 py-2">
-                                                            <i class="{{ $icon }} mr-1"></i>
-                                                            {{ ucfirst($status) }}
-                                                        </span>
+                                                        <form action="{{ route('nasabah.toggleStatus', $val->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            @if($val->status === 'aktif')
+                                                                <button type="submit" class="btn btn-success btn-sm rounded-pill px-3">
+                                                                    <i class="fas fa-check-circle"></i> Aktif
+                                                                </button>
+                                                            @else
+                                                                <button type="submit" class="btn btn-secondary btn-sm rounded-pill px-3">
+                                                                    <i class="fas fa-times-circle"></i> Nonaktif
+                                                                </button>
+                                                            @endif
+                                                        </form>
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ url('/admin/manajemen/nasabah/show/' . $val->id) }}"
-                                                                class="btn btn-info btn-sm" data-toggle="tooltip"
-                                                                title="Lihat Detail">
-                                                                <i class="fas fa-eye"></i>
-                                                            </a>
                                                             <a href="{{ url('/admin/manajemen/nasabah/edit/' . $val->id) }}"
                                                                 class="btn btn-warning btn-sm" data-toggle="tooltip"
                                                                 title="Edit Data">
@@ -560,6 +520,10 @@
     </script>
 
     <style>
+        .btn-rounded {
+    border-radius: 50px !important;
+}
+
         .small-box {
             border-radius: 15px;
             transition: all 0.3s ease;

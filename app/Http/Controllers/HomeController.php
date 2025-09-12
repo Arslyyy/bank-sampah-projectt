@@ -22,9 +22,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $datas = TransaksiNasabah::all();
-        return view('pages.transaksi.list_home', compact('datas'));
-    }
+public function index()
+{
+    // ambil transaksi beserta relasi jenisSampah
+    $datas = TransaksiNasabah::with('jenisSampah')->get();
+
+    // ambil daftar jenis sampah unik dari transaksi yang sudah ada
+    $jenisList = $datas->pluck('jenisSampah.type_sampah')->filter()->unique();
+
+    return view('pages.transaksi.list_home', compact('datas', 'jenisList'));
+}
+
 }

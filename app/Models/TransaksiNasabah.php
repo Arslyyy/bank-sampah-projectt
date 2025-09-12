@@ -46,9 +46,9 @@ class TransaksiNasabah extends Model
 
     }
 
-    public function hargaSampah(): BelongsTo
+    public function hargaSampah()
 {
-    return $this->belongsTo(MasterHargaSampah::class, 'id_master_harga_sampah', 'id');
+    return $this->belongsTo(MasterHargaSampah::class, 'id_harga_sampah', 'id');
 }
 
 

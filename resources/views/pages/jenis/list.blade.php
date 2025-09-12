@@ -379,7 +379,7 @@
 
         function confirmDelete(id, nama) {
             const form = document.getElementById('deleteForm');
-            form.action = `admin/bank/jenis/delete/${id}`; // Sesuaikan dengan URL hapus Anda
+            form.action = `/admin/bank/jenis/delete/${id}`; // Sesuaikan dengan URL hapus Anda
             $('#deleteText').text(`Jenis sampah "${nama}" akan dihapus dari sistem.`);
             $('#deleteModal').modal('show');
         }
@@ -395,7 +395,7 @@
                 pageLength: 10,
                 dom: 'rt<"row"<"col-sm-6"i><"col-sm-6"p>>',
                 order: [
-                    [1, "asc"]
+                    [1, "desc"]
                 ],
                 columnDefs: [{
                     "targets": [0, 2],
@@ -433,7 +433,7 @@
                     'disabled', true);
 
                 $.ajax({
-                    type: 'POST',
+                    type: 'DELETE',
                     url: actionUrl,
                     data: form.serialize(),
                     success: function(response) {

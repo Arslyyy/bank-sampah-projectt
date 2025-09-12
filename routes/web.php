@@ -12,6 +12,7 @@ use App\Http\Controllers\MasterHargaSampahController;
 use App\Http\Controllers\DataTransaksiController;
 use App\Http\Controllers\DashboardNasabahController;
 use App\Http\Controllers\TransaksiNasabahController;
+use App\Http\Controllers\NasabahAccountController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         Route::get('/edit/{id}', [MasterNasabahController::class, 'edit'])->name('nasabah.edit')->where('id', '[0-9]+');
         Route::put('/update/{id}', [MasterNasabahController::class, 'update'])->name('nasabah.update')->where('id', '[0-9]+');
         Route::delete('/{id}', [MasterNasabahController::class, 'destroy'])->name('nasabah.destroy');
+        Route::patch('/nasabah/{id}/toggle-status', [MasterNasabahController::class, 'toggleStatus'])->name('nasabah.toggleStatus');
     });
 
     // Transaksi Pemasukkan
@@ -102,15 +104,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 // NASABAH ROUTES
 // ====================
 Route::middleware(['auth', 'role:nasabah'])->prefix('nasabah')->group(function () {
+    // Dashboard Nasabah
     Route::get('/dashboard', [HomeNasabahController::class, 'index'])->name('nasabah.dashboard');
-});
-Route::middleware(['auth', 'role:nasabah'])->prefix('nasabah')->group(function () {
-    // Route::get('/dashboard', [DashboardNasabahController::class, 'index'])->name('nasabah.dashboard');
 
     // Transaksi pengeluaran milik nasabah
     Route::get('/pengeluaran', [DashboardNasabahController::class, 'pengeluaran'])->name('nasabah.pengeluaran.index');
-});
 
+    // Kelola Akun
+    Route::get('/kelolaakun', [NasabahAccountController::class, 'index'])->name('nasabah.kelolaakun');
+    Route::post('/kelolaakun/password', [NasabahAccountController::class, 'updatePassword'])->name('nasabah.updatePassword');
+    Route::post('/nasabah/check-password', [App\Http\Controllers\NasabahAccountController::class, 'checkPassword'])
+        ->name('nasabah.checkPassword');
+
+});
 
 // ambil harga
 Route::get('/get-harga/{id}', [PengeluaranNasabahController::class, 'getHarga']);

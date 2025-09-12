@@ -186,13 +186,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
                         <li class="nav-item"> <!-- menu-open -->
                             <a href="{{ url('/nasabah/dashboard') }}"
-                                class="nav-link {{ request()->is('/nasabah/dashboard*') ? 'active' : '' }}"> <!-- active -->
+                                class="nav-link {{ request()->is('nasabah/dashboard*') ? 'active' : '' }}"> <!-- active -->
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Home</p>
                             </a>
                         </li>
 
-
+                        <li class="nav-item"> <!-- menu-open -->
+                            <a href="{{ url('/nasabah/kelolaakun') }}"
+                                class="nav-link {{ request()->is('nasabah/kelolaakun*') ? 'active' : '' }}"> <!-- active -->
+                                <i class="nav-icon fas fa-user-cog"></i>
+                                <p>Kelola Akun</p>
+                            </a>
+                        </li>
 
                         <li class="nav-item"> <!-- menu-open -->
                             <a class="nav-link" href="{{ route('logout') }}"

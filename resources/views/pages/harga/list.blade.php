@@ -213,12 +213,6 @@
                                                                 title="Edit Data">
                                                                 <i class="fas fa-edit mr-1"></i> Edit
                                                             </a>
-                                                            <button
-                                                                class="btn btn-outline-info btn-sm rounded-pill px-3 ml-1"
-                                                                onclick="viewDetail({{ $val->id }})"
-                                                                title="Lihat Detail">
-                                                                <i class="fas fa-eye mr-1"></i> Detail
-                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>

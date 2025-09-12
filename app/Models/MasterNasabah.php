@@ -14,15 +14,18 @@ class MasterNasabah extends Model
     protected $fillable = [
         'nama',
         'alamat',
+        'user_id',
+        'status',
     ];
 
     /**
-     * Relasi ke User (1 nasabah bisa punya banyak user login)
+     * Relasi ke User (1 nasabah punya 1 user login)
      */
     public function user()
     {
-        return $this->hasOne(User::class, 'nasabah_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
     public function transaksi()
     {
         return $this->hasMany(TransaksiNasabah::class, 'master_nasabah_id', 'id');

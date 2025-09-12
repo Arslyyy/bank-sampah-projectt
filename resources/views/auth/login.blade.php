@@ -51,10 +51,16 @@
                     <img src="{{ asset('assets/images/LogoKemendikbud.png') }}" alt="Logo 1" height="40">
                 </li>
                 <li class="nav-item mx-2">
-                    <img src="{{ asset('assets/images/LogoUsm.png') }}" alt="Logo 2" height="40">
+                    <img src="{{ asset('assets/images/bimaa.png') }}" alt="Logo 2" height="40">
                 </li>
                 <li class="nav-item mx-2">
-                    <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo 3" height="40">
+                    <img src="{{ asset('assets/images/saintekberdampak.png') }}" alt="Logo 3" height="40">
+                </li>
+                <li class="nav-item mx-2">
+                    <img src="{{ asset('assets/images/LogoUsm.png') }}" alt="Logo 4" height="40">
+                </li>
+                <li class="nav-item mx-2">
+                    <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo 5" height="40">
                 </li>
             </ul>
         </div>

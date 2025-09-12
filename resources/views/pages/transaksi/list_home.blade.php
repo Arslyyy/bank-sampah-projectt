@@ -126,14 +126,15 @@
                                                 placeholder="Cari nasabah, jenis sampah...">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <select class="form-control custom-select" id="filterJenis">
-                                            <option value="">Semua Jenis Sampah</option>
-                                            @foreach ($datas->groupBy('jenis_sampah.type_sampah') as $jenis => $items)
-                                                <option value="{{ $jenis }}">{{ $jenis }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+<div class="col-md-3">
+    <select class="form-control custom-select" id="filterJenis">
+        <option value="">Semua Jenis Sampah</option>
+        @foreach ($jenisList as $jenis)
+            <option value="{{ $jenis }}">{{ $jenis }}</option>
+        @endforeach
+    </select>
+</div>
+
                                     <div class="col-md-3">
                                         <input type="date" class="form-control" id="filterTanggal"
                                             placeholder="Filter Tanggal">

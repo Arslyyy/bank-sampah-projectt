@@ -12,34 +12,19 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
-        'nasabah_id', // ✅ tambahkan ini
+        'nasabah_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -48,8 +33,9 @@ class User extends Authenticatable
     /**
      * Relasi ke MasterNasabah
      */
-    public function masterNasabah()
+    public function nasabah()
     {
-        return $this->belongsTo(MasterNasabah::class, 'nasabah_id');
+        return $this->hasOne(MasterNasabah::class, 'user_id', 'id');
     }
+
 }

@@ -15,6 +15,18 @@ class MasterNasabahController extends Controller
     public function index()
     {
         $datas = MasterNasabah::all();
+
+        // tambahan: ikutkan user biar bisa tampil email + data nasabah
+        $datas = MasterNasabah::select(
+                'master_nasabah.id',
+                'master_nasabah.nama',
+                'master_nasabah.alamat',
+                'master_nasabah.status',
+                'users.email'
+            )
+            ->join('users', 'users.nasabah_id', '=', 'master_nasabah.id')
+            ->get();
+
         return view('pages.nasabah.list', compact('datas'));
     }
 
@@ -36,7 +48,7 @@ class MasterNasabahController extends Controller
         $this->validate($request, [
             'nama'   => 'required|min:3',
             'alamat' => 'required|min:5',
-            'email'  => 'required|email|unique:users,email', // untuk akun nasabah
+            'email'  => 'required|email|unique:users,email', 
             'password' => 'required|min:6',
         ]);
 
@@ -44,42 +56,45 @@ class MasterNasabahController extends Controller
         $nasabah = MasterNasabah::create([
             'nama'   => $request->nama,
             'alamat' => $request->alamat,
+            'status' => 'aktif',
         ]);
 
-        // buat akun login untuk nasabah di tabel users
-        User::create([
-            'name'     => $request->nama,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password), // password sesuai input admin
-            'role'     => 'nasabah',
+        $user = User::create([
+            'name'       => $request->nama,
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password), 
+            'role'       => 'nasabah',
             'nasabah_id' => $nasabah->id,
         ]);
 
+        $nasabah->user_id = $user->id;
+        $nasabah->save();
 
         return redirect()->route('nasabah.index')->with(['success' => 'Data Nasabah & Akun Login Berhasil Dibuat!']);
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
-public function edit(string $id)
-{
-    $data = MasterNasabah::with('user')->findOrFail($id);
-    return view('pages.nasabah.form', compact('data'));
-}
+    public function edit(string $id)
+    {
+        $data = MasterNasabah::with('user')->findOrFail($id);
+        return view('pages.nasabah.form', compact('data'));
+    }
 
 
 public function update(Request $request, string $id)
 {
+    $data = MasterNasabah::findOrFail($id);
+    $user = User::where('nasabah_id', $data->id)->first();
+
     $this->validate($request, [
         'nama'   => 'required|min:3',
         'alamat' => 'required|min:5',
-        'email'  => 'required|email|unique:users,email,' . $id, // supaya email bisa tetap sama
-        'password' => 'nullable|min:6', // boleh kosong saat update
+        'email'  => 'required|email|unique:users,email,' . $user->id, // supaya email bisa tetap sama
+        'password' => 'nullable|min:6',
     ]);
-
-    $data = MasterNasabah::findOrFail($id);
-    $user = User::where('nasabah_id', $data->id)->first();
 
     // update data nasabah
     $data->update([
@@ -96,6 +111,7 @@ public function update(Request $request, string $id)
 
     return redirect()->route('nasabah.index')->with(['success' => 'Data Nasabah & Akun Login Berhasil Diubah!']);
 }
+
 
     /**
      * Remove the specified resource from storage.
@@ -115,4 +131,14 @@ public function update(Request $request, string $id)
             return redirect()->route('nasabah.index')->with(['error' => 'Gagal menghapus data.']);
         }
     }
+
+    public function toggleStatus($id)
+    {
+        $nasabah = MasterNasabah::findOrFail($id);
+        $nasabah->status = $nasabah->status === 'aktif' ? 'nonaktif' : 'aktif';
+        $nasabah->save();
+
+        return back()->with('success', 'Status nasabah berhasil diubah.');
+    }
+
 }

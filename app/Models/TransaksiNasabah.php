@@ -42,8 +42,15 @@ class TransaksiNasabah extends Model
     // Relasi ke satuan
     public function satuan()
     {
-        return $this->belongsTo(MasterSatuan::class, 'master_satuan_id');
+        return $this->belongsTo(MasterHargaSampah::class, 'id_harga_sampah', 'id');
+
     }
+
+    public function hargaSampah(): BelongsTo
+{
+    return $this->belongsTo(MasterHargaSampah::class, 'id_master_harga_sampah', 'id');
+}
+
 
     // Scope untuk filter berdasarkan jenis transaksi
     public function scopePemasukan($query)

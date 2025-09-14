@@ -21,6 +21,8 @@ class TransaksiNasabah extends Model
         'jumlah_berat',
         'jumlah',
         'jenis',
+        'image',
+        'uraian',
     ];
 
     protected $casts = [

@@ -118,6 +118,7 @@
 
     });
 
+
     // ambil harga
     Route::get('/get-harga/{id}', [PengeluaranNasabahController::class, 'getHarga']);
 

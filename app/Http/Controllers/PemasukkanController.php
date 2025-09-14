@@ -176,4 +176,12 @@ class PemasukkanController extends Controller
 
         return $id;
     }
+
+    public function nota($id)
+    {
+        $data = TransaksiNasabah::findOrFail($id);
+
+        return view('pages.transaksi.pemasukan.nota', compact('data'));
+    }
+
 }

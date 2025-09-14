@@ -78,6 +78,9 @@
                 <th class="text-right" style="width: 140px;">
                   <i class="fas fa-coins text-warning mr-1"></i> Jumlah
                 </th>
+                <th style="width: 140px;">
+                  <i class="fas fa-file-image text-danger mr-1"></i> Upload Nota
+                </th>
                 <th class="text-center" style="width: 110px;">Aksi</th>
               </tr>
             </thead>
@@ -101,6 +104,15 @@
                   <i class="fas fa-coins text-warning mr-1"></i>
                   Rp {{ number_format($item->jumlah, 0, ',', '.') }}
                 </td>
+                <td class="align-middle">
+                @if($item->image)
+                  <a href="{{ asset('storage/'.$item->image) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                    <i class="fas fa-eye mr-1"></i> Lihat Gambar
+                  </a>
+                @else
+                  <span class="text-muted"><i class="fas fa-times-circle mr-1"></i> -</span>
+                @endif
+              </td>
                 <td class="align-middle text-center">
                   <a href="{{ route('pemasukkan.edit', $item->id) }}" class="btn btn-sm btn-warning shadow-sm" title="Edit Data">
                     <i class="fas fa-edit"></i>

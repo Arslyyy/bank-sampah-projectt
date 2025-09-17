@@ -45,7 +45,11 @@ class DataTransaksiController extends Controller
         $sisaSaldo = $totalPemasukan - $totalPengeluaran - $totalOperasional;
 
         return view('pages.transaksi.list', compact(
-            'data', 'totalPemasukan', 'totalPengeluaran', 'totalOperasional', 'sisaSaldo'
+            'data',
+            'totalPemasukan',
+            'totalPengeluaran',
+            'totalOperasional',
+            'sisaSaldo'
         ));
     }
 
@@ -68,7 +72,7 @@ class DataTransaksiController extends Controller
 
         $data = $query->orderBy('tanggal_transaksi', 'asc')->get();
 
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Buku Kas');
 
@@ -78,7 +82,8 @@ class DataTransaksiController extends Controller
         $sheet->setCellValue('A2', 'Kel. KEMBANGSARI, KEC. SEMARANG TENGAH, SEMARANG');
         $sheet->mergeCells('A2:F2');
 
-        $bulanNama = Carbon::createFromDate($request->tahun, $request->bulan, 1)->translatedFormat('F Y');
+        $bulanNama = \Carbon\Carbon::createFromDate($request->tahun, $request->bulan, 1)
+            ->translatedFormat('F Y');
         $sheet->setCellValue('A4', "BULAN : " . $bulanNama);
         $sheet->mergeCells('A4:F4');
 
@@ -113,7 +118,7 @@ class DataTransaksiController extends Controller
         $totalOperasional = 0;
 
         foreach ($data as $item) {
-            $tanggal = Carbon::parse($item->tanggal_transaksi)->translatedFormat('d F Y');
+            $tanggal = \Carbon\Carbon::parse($item->tanggal_transaksi)->translatedFormat('d F Y');
             $uraian = $item->uraian ?? '-';
             $masuk = $item->jenis === 'pemasukan' ? $item->jumlah : 0;
             $keluar = $item->jenis === 'pengeluaran' ? $item->jumlah : 0;
@@ -160,7 +165,7 @@ class DataTransaksiController extends Controller
 
         // Tanda tangan
         $row += 2;
-        $sheet->setCellValue("E{$row}", "Semarang, " . Carbon::now()->translatedFormat('d F Y'));
+        $sheet->setCellValue("E{$row}", "Semarang, " . \Carbon\Carbon::now()->translatedFormat('d F Y'));
         $row += 1;
         $sheet->setCellValue("C{$row}", "Ketua BS Salam Lestari");
         $sheet->setCellValue("E{$row}", "Bendahara");
@@ -172,14 +177,20 @@ class DataTransaksiController extends Controller
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
-        $writer = new Xlsx($spreadsheet);
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $filename = "buku_kas_{$bulanNama}.xlsx";
 
-        return response()->streamDownload(function () use ($writer) {
-            $writer->save('php://output');
-        }, $filename, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        ]);
+        // --- solusi: output langsung ---
+        if (ob_get_length() > 0) {
+            ob_end_clean(); // bersihkan buffer supaya output bersih
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment;filename=\"{$filename}\"");
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 
     public function exportPdf(Request $request)
@@ -213,7 +224,12 @@ class DataTransaksiController extends Controller
         $saldo = $totalMasuk - $totalKeluar - $totalOperasional;
 
         $pdf = Pdf::loadView('pages.transaksi.pdf', compact(
-            'data', 'bulanNama', 'totalMasuk', 'totalKeluar', 'totalOperasional', 'saldo'
+            'data',
+            'bulanNama',
+            'totalMasuk',
+            'totalKeluar',
+            'totalOperasional',
+            'saldo'
         ))->setPaper('a4', 'landscape');
 
         return $pdf->download("buku_kas_{$bulanNama}.pdf");

@@ -182,6 +182,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Tanggal</th>
+                                            <th>Id Transaksi</th>
                                             <th>Jenis Sampah</th>
                                             <th>Berat</th>
                                             <th>Satuan</th>
@@ -193,7 +194,12 @@
                                         <tr>
                                             <td>
                                                 <small
-                                                    class="text-muted">{{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d/m/Y H:i') }}</small>
+                                                    class="text-muted">{{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d/m/Y') }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="font-weight-bold">
+                                                    {{ $transaksi->id_transaksi }}
+                                                </span>
                                             </td>
                                             <td>
                                                 <span

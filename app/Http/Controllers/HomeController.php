@@ -3,34 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\TransaksiNasabah;
+use App\Models\MasterNasabah;
+use App\Models\MasterJenisSampah;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
 public function index()
 {
-    // ambil transaksi beserta relasi jenisSampah
-    $datas = TransaksiNasabah::with('jenisSampah')->get();
+    // ambil data transaksi + relasi
+    $datas = TransaksiNasabah::with(['nasabah', 'jenisSampah'])->get();
 
-    // ambil daftar jenis sampah unik dari transaksi yang sudah ada
-    $jenisList = $datas->pluck('jenisSampah.type_sampah')->filter()->unique();
+    // ambil total dari tabel master
+    $totalNasabah = MasterNasabah::count();
+    $totalJenisSampah = MasterJenisSampah::count();
 
-    return view('pages.transaksi.list_home', compact('datas', 'jenisList'));
+    // ambil daftar jenis sampah
+    $jenisList = MasterJenisSampah::pluck('type_sampah');
+
+    return view('pages.transaksi.list_home', compact(
+        'datas',
+        'totalNasabah',
+        'totalJenisSampah',
+        'jenisList'
+    ));
 }
 
 }

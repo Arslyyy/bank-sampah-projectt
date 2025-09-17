@@ -262,7 +262,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <a href="{{ route('transaksi.index') }}"
                                     class="nav-link {{ request()->is('admin/transaksi/data*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Data Transaksi</p>
+                                    <p>Pelaporan</p>
                                     </a>
 
 
@@ -284,7 +284,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </ul>
                         </li>
 
+                         <li class="nav-item">
+                            <a href="{{ route('saldo.index') }}"
+                                class="nav-link {{ request()->is('admin/saldo*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-money-check-alt"></i>
+                                <p>Saldo Akhir</p>
+                            </a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a href="{{ route('operasional.index') }}" class="nav-link {{ request()->is('admin/operasional*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-briefcase"></i>
+                                <p>Operasional</p>
+                            </a>
+                        </li>
 
                         <li class="nav-item"> <!-- menu-open -->
                             <a class="nav-link" href="{{ route('logout') }}"

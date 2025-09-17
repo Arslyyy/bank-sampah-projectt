@@ -80,27 +80,25 @@ class PengeluaranNasabahController extends Controller
         $count = count($request->tanggal_transaksi ?? []);
 
         for ($i = 0; $i < $count; $i++) {
-            // Ambil jumlah dari total-raw, bukan dari berat
-            $jumlah = $request->total[$i] ?? 0;
-            $jumlah = (float) str_replace(['.', ','], ['', '.'], $jumlah);
+            // ✅ parsing angka aman
+            $jumlahBerat = (float) str_replace(',', '.', $request->total[$i] ?? 0);
+            $jumlahHarga = (float) preg_replace('/[^0-9]/', '', $request->jumlah[$i] ?? 0);
 
-        TransaksiNasabah::create([
-            'id_transaksi' => $request->id_transaksi[$i] ?? $this->generateIdTransaksi(),
-            'tanggal_transaksi' => $request->tanggal_transaksi[$i] ?? null,
-            'master_nasabah_id' => $request->master_nasabah_id[$i] ?? null,
-            'master_jenis_sampah_id' => $request->id_master_jenis_sampah[$i] ?? null,
-            'master_satuan_id' => $request->master_satuan_id[$i] ?? null,
-            'jumlah_berat' => (float) str_replace('.', '', $request->total[$i] ?? 0), // berat
-            'jumlah' => (float) str_replace('.', '', $request->jumlah[$i] ?? 0), // total harga
-            'jenis' => 'pengeluaran',
-        ]);
-
+            TransaksiNasabah::create([
+                'id_transaksi' => $request->id_transaksi[$i] ?? $this->generateIdTransaksi(),
+                'tanggal_transaksi' => $request->tanggal_transaksi[$i] ?? null,
+                'master_nasabah_id' => $request->master_nasabah_id[$i] ?? null,
+                'master_jenis_sampah_id' => $request->id_master_jenis_sampah[$i] ?? null,
+                'master_satuan_id' => $request->master_satuan_id[$i] ?? null,
+                'jumlah_berat' => $jumlahBerat,  // berat desimal
+                'jumlah' => $jumlahHarga,        // rupiah
+                'jenis' => 'pengeluaran',
+            ]);
         }
 
         return redirect()->route('pengeluaran.index')
                         ->with('success', 'Data pengeluaran berhasil ditambahkan');
     }
-
     /**
      * Form edit pengeluaran
      */
@@ -119,9 +117,9 @@ class PengeluaranNasabahController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Pastikan nilai jumlah dan total diubah jadi angka
-        $jumlah_berat = isset($request->total) ? (float) str_replace('.', '', $request->total) : 0;
-        $jumlah = isset($request->jumlah) ? (float) str_replace('.', '', $request->jumlah) : 0;
+        // ✅ parsing angka aman
+        $jumlahBerat = isset($request->total) ? (float) str_replace(',', '.', $request->total) : 0;
+        $jumlahHarga = isset($request->jumlah) ? (float) preg_replace('/[^0-9]/', '', $request->jumlah) : 0;
 
         // Validasi input
         $rules = [
@@ -143,14 +141,13 @@ class PengeluaranNasabahController extends Controller
             'master_nasabah_id' => $request->master_nasabah_id ?? null,
             'master_jenis_sampah_id' => $request->id_master_jenis_sampah ?? null,
             'master_satuan_id' => $request->master_satuan_id ?? null,
-            'jumlah_berat' => $jumlah_berat, // berat
-            'jumlah' => $jumlah,             // total harga
+            'jumlah_berat' => $jumlahBerat, // berat desimal
+            'jumlah' => $jumlahHarga,       // rupiah
             'jenis' => 'pengeluaran',
         ]);
 
         return redirect()->route('pengeluaran.index')->with('success', 'Data pengeluaran berhasil diupdate');
     }
-
 
 
     /**

@@ -13,6 +13,8 @@
     use App\Http\Controllers\DashboardNasabahController;
     use App\Http\Controllers\TransaksiNasabahController;
     use App\Http\Controllers\NasabahAccountController;
+    use App\Http\Controllers\SaldoController;
+    use App\Http\Controllers\OperasionalController;
 
     use Illuminate\Support\Facades\Route;
 
@@ -97,8 +99,17 @@
         // Data Transaksi
         Route::get('transaksi/data', [DataTransaksiController::class, 'index'])->name('transaksi.index');
         Route::get('transaksi/export', [DataTransaksiController::class, 'export'])->name('transaksi.export');
-        Route::get('pengeluaran/export', [DataTransaksiController::class, 'exportPdf'])->name('pengeluaran.exportPdf');
+        Route::get('transaksi/export-pdf', [DataTransaksiController::class, 'exportPdf'])->name('transaksi.exportPdf');
     });
+
+    // route saldo
+    Route::get('/admin/saldo', [SaldoController::class, 'index'])->name('saldo.index');
+
+    // route operasional
+    Route::prefix('admin')->group(function () {
+    Route::resource('operasional', OperasionalController::class)->except(['show']);
+    });
+
 
     // ====================
     // NASABAH ROUTES

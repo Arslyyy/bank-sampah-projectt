@@ -210,11 +210,14 @@
                                                 <i class="fas fa-balance-scale text-warning mr-2"></i> 
                                                 Berat Sampah <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" name="total[]" 
-                                                class="form-control jumlah" 
-                                                placeholder="0" 
-                                                onkeyup="hitungTotal(this)">
+                                            <input type="number" 
+                                                name="{{ isset($data) ? 'total' : 'total[]' }}" 
+                                                class="form-control jumlah"
+                                                step="0.01" min="0" 
+                                                value="{{ isset($data) ? $data->jumlah_berat : '' }}" 
+                                                onkeyup="hitungTotal(this)" required>
                                         </div>
+
 
                                         <!-- Total (otomatis) -->
                                         <div class="form-group mb-3">
@@ -282,16 +285,6 @@
 
 <!-- JS -->
 <script>
-    // Format angka ke ribuan dengan titik
-    function formatCurrency(input) {
-        let value = input.value.replace(/\D/g, '');
-        if (!value) {
-            input.value = '';
-            return;
-        }
-        input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    }
-
     // Event delegasi: semua input class 'jumlah' otomatis terformat
     document.addEventListener("input", e => {
         if (e.target.classList.contains("jumlah")) {
@@ -346,14 +339,15 @@
     // Hitung total (jumlah × harga)
     function hitungTotal(jumlahInput) {
         let formGroup = $(jumlahInput).closest('.pengeluaran-form');
-        let harga = parseInt(formGroup.find('.harga-sampah-raw').val() || 0);
-        let jumlah = parseInt(jumlahInput.value.replace(/\./g, '') || 0);
+        let harga = parseFloat(formGroup.find('.harga-sampah-raw').val() || 0);
+        let jumlah = parseFloat(jumlahInput.value.replace(',', '.') || 0); // support koma & titik
         let total = harga * jumlah;
 
         // tampilkan hasil
         formGroup.find('.total').val("Rp " + total.toLocaleString('id-ID'));
         formGroup.find('.total-raw').val(total);
     }
+
 
     // Saat pilih jenis sampah → ambil harga
     $(document).on('change', '.jenis-sampah', function () {

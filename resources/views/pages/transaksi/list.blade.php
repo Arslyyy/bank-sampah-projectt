@@ -7,7 +7,7 @@
             <div class="row align-items-center">
                 <div class="col-sm-6">
                     <h1 class="font-weight-bold text-info">
-                        <i class="fas fa-file-invoice-dollar mr-2"></i> Data Transaksi
+                        <i class="fas fa-file-invoice-dollar mr-2"></i> Pelaporan
                     </h1>
                 </div>
             </div>
@@ -72,11 +72,11 @@
                     {{-- Tombol Download --}}
                     @if(request()->filled('bulan'))
                         <div class="mt-3">
-                            <a href="{{ route('transaksi.export', ['bulan' => request('bulan'), 'tahun' => request('tahun')]) }}"
+                            <a href="{{ route('transaksi.export', request()->all()) }}"
                                class="btn btn-success btn-sm shadow-sm mr-2">
                                 <i class="fas fa-file-excel mr-1"></i> Download Excel
                             </a>
-                            <a href="{{ route('pengeluaran.exportPdf', request()->all()) }}" 
+                            <a href="{{ route('transaksi.exportPdf', request()->all()) }}" 
                                class="btn btn-danger btn-sm shadow-sm">
                                 <i class="fas fa-file-pdf mr-1"></i> Download PDF
                             </a>
@@ -130,7 +130,7 @@
                                         @endif
                                     </td>
                                     <td class="text-right font-weight-bold 
-                                        {{ $val->jenis == 'pemasukan' ? 'text-success' : ($val->jenis == 'pengeluaran' ? 'text-danger' : '') }}">
+                                        {{ $val->jenis == 'pemasukan' ? 'text-success' : ($val->jenis == 'pengeluaran' || $val->jenis == 'operasional' ? 'text-danger' : '') }}">
                                         {{ $val->jumlah !== null ? 'Rp ' . number_format($val->jumlah, 0, ',', '.') : '-' }}
                                     </td>
                                     <td class="text-truncate" style="max-width: 280px;">
@@ -156,9 +156,6 @@
 
                     {{-- Total transaksi --}}
                     @if(request()->filled('bulan') || request()->filled('tahun'))
-                        @php
-                            $sisaSaldo = $totalPemasukan - $totalPengeluaran;
-                        @endphp
                         <div class="bg-light border rounded px-4 py-2 shadow-sm mt-3 mt-md-0">
                             <span class="mr-4">
                                 <i class="fas fa-arrow-down text-success"></i> 
@@ -174,10 +171,17 @@
                                     Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
                                 </span>
                             </span>
+                            <span class="mr-4">
+                                <i class="fas fa-cogs text-warning"></i> 
+                                Operasional: 
+                                <span class="text-warning font-weight-bold">
+                                    Rp {{ number_format($totalOperasional, 0, ',', '.') }}
+                                </span>
+                            </span>
                             <span>
                                 <i class="fas fa-wallet text-primary"></i> 
                                 Sisa Saldo: 
-                                <span class="{{ $sisaSaldo >= 0 ? 'text-primary' : 'text-warning' }} font-weight-bold">
+                                <span class="{{ $sisaSaldo >= 0 ? 'text-primary' : 'text-danger' }} font-weight-bold">
                                     Rp {{ number_format($sisaSaldo, 0, ',', '.') }}
                                 </span>
                             </span>

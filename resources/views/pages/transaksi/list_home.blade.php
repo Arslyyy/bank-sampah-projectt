@@ -66,7 +66,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <h5 class="mb-1">Jenis Sampah</h5>
-                                        <h3 class="mb-0">{{ $datas->groupBy('jenis_sampah_id')->count() }}</h3>
+                                        <h3 class="mb-0">{{ $totalJenisSampah }}</h3>
                                     </div>
                                     <div class="ml-3">
                                         <i class="fas fa-trash-alt fa-2x opacity-75"></i>
@@ -81,7 +81,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <h5 class="mb-1">Nasabah Aktif</h5>
-                                        <h3 class="mb-0">{{ $datas->groupBy('nasabah_id')->count() }}</h3>
+                                        <h3 class="mb-0">{{ $totalNasabah }}</h3>
                                     </div>
                                     <div class="ml-3">
                                         <i class="fas fa-users fa-2x opacity-75"></i>
@@ -126,14 +126,14 @@
                                                 placeholder="Cari nasabah, jenis sampah...">
                                         </div>
                                     </div>
-<div class="col-md-3">
-    <select class="form-control custom-select" id="filterJenis">
-        <option value="">Semua Jenis Sampah</option>
-        @foreach ($jenisList as $jenis)
-            <option value="{{ $jenis }}">{{ $jenis }}</option>
-        @endforeach
-    </select>
-</div>
+                                    <div class="col-md-3">
+                                        <select class="form-control custom-select" id="filterJenis">
+                                            <option value="">Semua Jenis Sampah</option>
+                                            @foreach ($jenisList as $jenis)
+                                                <option value="{{ $jenis }}">{{ $jenis }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
                                     <div class="col-md-3">
                                         <input type="date" class="form-control" id="filterTanggal"

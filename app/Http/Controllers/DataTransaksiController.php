@@ -15,30 +15,38 @@ class DataTransaksiController extends Controller
     {
         $baseQuery = TransaksiNasabah::with(['satuan', 'nasabah', 'jenisSampah']);
 
-        // 🔹 filter nama nasabah
+        // 🔹 Filter nama nasabah
         if ($request->filled('nasabah')) {
             $baseQuery->whereHas('nasabah', function ($q) use ($request) {
                 $q->where('nama', 'like', '%' . $request->nasabah . '%');
             });
         }
 
+        // 🔹 Filter bulan & tahun
         if ($request->filled('bulan')) {
             $baseQuery->whereMonth('tanggal_transaksi', $request->bulan);
         }
-
         if ($request->filled('tahun')) {
             $baseQuery->whereYear('tanggal_transaksi', $request->tahun);
         }
 
+        // 🔹 Data tabel
         $data = (clone $baseQuery)
             ->orderBy('tanggal_transaksi', 'desc')
             ->paginate(10)
             ->appends($request->all());
 
+        // 🔹 Total transaksi
         $totalPemasukan = (clone $baseQuery)->where('jenis', 'pemasukan')->sum('jumlah');
         $totalPengeluaran = (clone $baseQuery)->where('jenis', 'pengeluaran')->sum('jumlah');
+        $totalOperasional = (clone $baseQuery)->where('jenis', 'operasional')->sum('jumlah');
 
-        return view('pages.transaksi.list', compact('data', 'totalPemasukan', 'totalPengeluaran'));
+        // 🔹 Sisa saldo
+        $sisaSaldo = $totalPemasukan - $totalPengeluaran - $totalOperasional;
+
+        return view('pages.transaksi.list', compact(
+            'data', 'totalPemasukan', 'totalPengeluaran', 'totalOperasional', 'sisaSaldo'
+        ));
     }
 
     public function export(Request $request)
@@ -64,7 +72,7 @@ class DataTransaksiController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Buku Kas');
 
-        // ✅ Judul
+        // Judul
         $sheet->setCellValue('A1', 'BUKU KAS BANK SAMPAH "SALAM LESTARI" RW 05');
         $sheet->mergeCells('A1:F1');
         $sheet->setCellValue('A2', 'Kel. KEMBANGSARI, KEC. SEMARANG TENGAH, SEMARANG');
@@ -74,7 +82,7 @@ class DataTransaksiController extends Controller
         $sheet->setCellValue('A4', "BULAN : " . $bulanNama);
         $sheet->mergeCells('A4:F4');
 
-        // ✅ Header tabel
+        // Header tabel
         $sheet->setCellValue('A6', 'No');
         $sheet->setCellValue('B6', 'Tanggal');
         $sheet->setCellValue('C6', 'Uraian');
@@ -82,7 +90,6 @@ class DataTransaksiController extends Controller
         $sheet->setCellValue('E6', 'Keluar');
         $sheet->setCellValue('F6', 'Saldo');
 
-        // Style header
         $headerStyle = [
             'font' => ['bold' => true],
             'alignment' => [
@@ -103,16 +110,19 @@ class DataTransaksiController extends Controller
         $saldo = 0;
         $totalMasuk = 0;
         $totalKeluar = 0;
+        $totalOperasional = 0;
 
         foreach ($data as $item) {
             $tanggal = Carbon::parse($item->tanggal_transaksi)->translatedFormat('d F Y');
             $uraian = $item->uraian ?? '-';
             $masuk = $item->jenis === 'pemasukan' ? $item->jumlah : 0;
             $keluar = $item->jenis === 'pengeluaran' ? $item->jumlah : 0;
+            $operasional = $item->jenis === 'operasional' ? $item->jumlah : 0;
 
-            $saldo += $masuk - $keluar;
+            $saldo += $masuk - $keluar - $operasional;
             $totalMasuk += $masuk;
             $totalKeluar += $keluar;
+            $totalOperasional += $operasional;
 
             $sheet->setCellValue("A{$row}", $no++);
             $sheet->setCellValue("B{$row}", $tanggal);
@@ -121,7 +131,6 @@ class DataTransaksiController extends Controller
             $sheet->setCellValue("E{$row}", $keluar > 0 ? $keluar : '');
             $sheet->setCellValue("F{$row}", $saldo);
 
-            // ✅ Tambahkan border di setiap baris data
             $sheet->getStyle("A{$row}:F{$row}")->applyFromArray([
                 'borders' => [
                     'allBorders' => [
@@ -134,14 +143,12 @@ class DataTransaksiController extends Controller
             $row++;
         }
 
-        // ✅ Total
+        // Total
         $sheet->setCellValue("C{$row}", "Jumlah");
         $sheet->setCellValue("D{$row}", $totalMasuk > 0 ? $totalMasuk : '');
         $sheet->setCellValue("E{$row}", $totalKeluar > 0 ? $totalKeluar : '');
         $sheet->setCellValue("F{$row}", $saldo);
 
-
-        // Border untuk total
         $sheet->getStyle("A{$row}:F{$row}")->applyFromArray([
             'font' => ['bold' => true],
             'borders' => [
@@ -150,8 +157,9 @@ class DataTransaksiController extends Controller
                 ],
             ],
         ]);
+
+        // Tanda tangan
         $row += 2;
-        // ✅ Tanda tangan
         $sheet->setCellValue("E{$row}", "Semarang, " . Carbon::now()->translatedFormat('d F Y'));
         $row += 1;
         $sheet->setCellValue("C{$row}", "Ketua BS Salam Lestari");
@@ -160,7 +168,6 @@ class DataTransaksiController extends Controller
         $sheet->setCellValue("C{$row}", "Suwardi");
         $sheet->setCellValue("E{$row}", "Umihanik Khotrunada");
 
-        // ✅ Auto width
         foreach (range('A', 'F') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -174,7 +181,8 @@ class DataTransaksiController extends Controller
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ]);
     }
-     public function exportPdf(Request $request)
+
+    public function exportPdf(Request $request)
     {
         $query = TransaksiNasabah::query();
 
@@ -201,10 +209,12 @@ class DataTransaksiController extends Controller
 
         $totalMasuk = $data->where('jenis', 'pemasukan')->sum('jumlah');
         $totalKeluar = $data->where('jenis', 'pengeluaran')->sum('jumlah');
-        $saldo = $totalMasuk - $totalKeluar;
+        $totalOperasional = $data->where('jenis', 'operasional')->sum('jumlah');
+        $saldo = $totalMasuk - $totalKeluar - $totalOperasional;
 
-        $pdf = Pdf::loadView('pages.transaksi.pdf', compact('data', 'bulanNama', 'totalMasuk', 'totalKeluar', 'saldo'))
-                  ->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('pages.transaksi.pdf', compact(
+            'data', 'bulanNama', 'totalMasuk', 'totalKeluar', 'totalOperasional', 'saldo'
+        ))->setPaper('a4', 'landscape');
 
         return $pdf->download("buku_kas_{$bulanNama}.pdf");
     }

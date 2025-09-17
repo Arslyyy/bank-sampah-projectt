@@ -21,6 +21,7 @@ class TransaksiNasabah extends Model
         'jumlah_berat',
         'jumlah',
         'jenis',
+        'jenis_operasional',
         'image',
         'uraian',
     ];
